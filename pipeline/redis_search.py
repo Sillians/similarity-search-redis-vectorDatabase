@@ -1,5 +1,4 @@
 import os
-
 from redis.commands.search.field import TagField, TextField, NumericField, VectorField
 from redis.commands.search.indexDefinition import IndexDefinition, IndexType
 # from src.core.logger import *
