@@ -1,4 +1,4 @@
-# Similarity search model abstraction
+# The Similarity search model abstraction
 from sentence_transformers import SentenceTransformer
 from src.utils.logger import get_logger
 from src.utils.config import get_config
