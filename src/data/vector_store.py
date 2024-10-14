@@ -1,4 +1,4 @@
-# Handling Redis vector operations
+# Redis vector operations
 from typing import List, Any
 from src.utils.redis_client import RedisClient
 from src.data.data_loader import BikeDataLoader
@@ -20,8 +20,12 @@ class RedisVectorOperations:
         pipeline = self.client.pipeline()
         for i, bike in enumerate(self.bikes, start=1):
             redis_key = f'{self.config.DOC_PREFIX}:{i:03}'
+            self.logger.info("Checking if the key already exists in Redis")
+            if self.client.exists(redis_key):
+                self.logger.info(f"Bike with ID {i:03} already exists, skipping insertion.")
+                return
             pipeline.json().set(redis_key, '$', bike)
-        self.logger.info("Executing the pipeline to store the bikes as JSON documents...")
+        self.logger.info("Stored the bikes JSON data in Redis.")
         return pipeline.execute()
 
     def add_vectorized_description(self) -> List:
@@ -29,8 +33,7 @@ class RedisVectorOperations:
         pipeline = self.client.pipeline()
         keys = sorted(self.client.keys(self.config.CLIENT_KEYS))
         for key, embedding in zip(keys, self.embeddings):
+            self.logger.info("Checking if the key already exists in Redis")
             pipeline.json().set(key, '$.description_embeddings', embedding)
-        self.logger.info("Executing the pipeline to add vectorized descriptions...")
+        self.logger.info("Stored the bike data with embeddings in Redis.")
         return pipeline.execute()
-
-
