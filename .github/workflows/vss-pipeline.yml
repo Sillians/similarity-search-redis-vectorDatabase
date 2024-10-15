@@ -50,12 +50,12 @@ jobs:
       # Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t chukwuebukacihuoma/vector-similarity-search:0.0.1 .
+          docker build -t chukwuebukacihuoma/vector-similarity-search:0.0.2 .
 
       # Push Docker image to Docker Hub
       - name: Push Docker image
         run: |
-          docker push chukwuebukacihuoma/vector-similarity-search:0.0.1
+          docker push chukwuebukacihuoma/vector-similarity-search:0.0.2
 #
 #  deploy:
 #    runs-on: ubuntu-latest
