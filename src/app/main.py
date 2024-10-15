@@ -30,11 +30,11 @@ def start_server():
         app=config.FASTAPI_APP,
         host=config.FASTAPI_HOST,
         port=config.FASTAPI_PORT,
-        reload=True,  # Enable auto-reload (for development)
-        workers=config.FASTAPI_WORKERS,
+        workers=config.FASTAPI_WORKERS
+        # reload=True,  # Enable auto-reload (for development)
     )
 
-    logger.info("Creating the server...")
+    logger.info("Creating the server.")
     server = uvicorn.Server(config_file)
     server.run()
 

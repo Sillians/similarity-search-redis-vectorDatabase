@@ -37,19 +37,15 @@ RUN chmod +x /docker-entrypoint.sh
 COPY . .
 
 # Expose port and healthcheck
-EXPOSE 8000
+EXPOSE 8001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-CMD curl -f http://localhost:8000/health || exit 1
+CMD curl -f http://localhost:8001/health || exit 1
 
 # Set PYTHONPATH to point to the correct code directory
 ENV APP_WORKDIR="/app"
 ENV PYTHONPATH="${APP_WORKDIR}/"
 
-#ENTRYPOINT ["/docker-entrypoint.sh"]
-
 # Command to run FastAPI using Uvicorn
-#CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
-CMD ["python", "src/app/main.py"]
+CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
 
