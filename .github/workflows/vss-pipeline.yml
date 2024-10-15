@@ -15,11 +15,11 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Set up Python
       - name: Set up Python 3.12
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.12
 
@@ -46,12 +46,12 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Get the short commit SHA
       - name: Get short commit SHA
         id: git_info
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: echo "tag=${GITHUB_SHA}" >> $GITHUB_ENV
 
       # Log in to Docker Hub using the environment variables
       - name: Log in to Docker Hub
@@ -60,12 +60,12 @@ jobs:
       # Build Docker image with dynamic tag based on the Git commit SHA
       - name: Build Docker image
         run: |
-          docker build -t chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }} .
+          docker build -t chukwuebukacihuoma/vector-similarity-search:${{ env.IMAGE_TAG }} .
 
       # Push Docker image with "latest" tag
       - name: Push Docker image with latest tag
         run: |
-          docker tag chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }} chukwuebukacihuoma/vector-similarity-search:latest
+          docker tag chukwuebukacihuoma/vector-similarity-search:${{ env.IMAGE_TAG }} chukwuebukacihuoma/vector-similarity-search:latest
           docker push chukwuebukacihuoma/vector-similarity-search:latest
 
 
@@ -90,23 +90,23 @@ jobs:
 #          kubectl rollout status deployment/your-app-deployment
 
 
-#deploy:
-#  runs-on: ubuntu-latest
-#  needs: build_and_push
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: build_and_push
 #
-#  steps:
-#    - name: Checkout code
-#      uses: actions/checkout@v2
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
 #
-#    - name: Set up kubectl
-#      uses: azure/setup-kubectl@v1
-#      with:
-#        version: 'v1.18.0'
+#      - name: Set up kubectl
+#        uses: azure/setup-kubectl@v1
+#        with:
+#          version: 'v1.18.0'
 #
-#    - name: Deploy to Kubernetes
-#      env:
-#        KUBECONFIG: ${{ secrets.KUBECONFIG }}  # store Kubeconfig in GitHub secrets
-#      run: |
-#        kubectl apply -f k8s/deployment.yml
-#        kubectl apply -f k8s/service.yml
-#        kubectl rollout status deployment/similarity-search-deployment
+#      - name: Deploy to Kubernetes
+#        env:
+#          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # store Kubeconfig in GitHub secrets
+#        run: |
+#          kubectl apply -f k8s/deployment.yml
+#          kubectl apply -f k8s/service.yml
+#          kubectl rollout status deployment/similarity-search-deployment
