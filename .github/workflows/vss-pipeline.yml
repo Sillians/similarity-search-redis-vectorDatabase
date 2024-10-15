@@ -33,29 +33,29 @@ jobs:
       - name: Run unit tests
         run: |
           pytest --cov=src src/tests/
-#
-#  build_and_push:
-#    runs-on: ubuntu-latest
-#    needs: test  # Only runs after tests pass
-#
-#    steps:
-#      # Checkout the repository
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      # Log in to Docker Hub or GitHub Container Registry
-#      - name: Log in to Docker Hub
-#        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-#
-#      # Build Docker image
-#      - name: Build Docker image
-#        run: |
-#          docker build -t your-dockerhub-username/your-image-name:latest .
-#
-#      # Push Docker image to Docker Hub
-#      - name: Push Docker image
-#        run: |
-#          docker push your-dockerhub-username/your-image-name:latest
+
+  build_and_push:
+    runs-on: ubuntu-latest
+    needs: test  # Only runs after tests pass
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Log in to Docker Hub or GitHub Container Registry
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t chukwuebukacihuoma/vector-similarity-search:0.0.1 .
+
+      # Push Docker image to Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push chukwuebukacihuoma/vector-similarity-search:0.0.1
 #
 #  deploy:
 #    runs-on: ubuntu-latest
