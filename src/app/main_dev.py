@@ -65,13 +65,11 @@ def main():
         print("Running test cases...")
         unittest.TextTestRunner().run(unittest.defaultTestLoader.discover('tests'))
     else:
-        # Run the main application
+        # Run main application
         print("Running main application...")
         vss = SemanticSearchApp()
         vss.run()
 
 
 if __name__ == "__main__":
-    # vss = SemanticSearchApp()
-    # vss.run()
     main()

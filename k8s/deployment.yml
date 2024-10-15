@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: similarity-search-deployment
+  labels:
+    app: similarity-search
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: similarity-search
+  template:
+    metadata:
+      labels:
+        app: similarity-search
+    spec:
+      containers:
+      - name: <your-app-container> # TODO
+        image: <your-dockerhub-username/your-app-image:latest> # TODO
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 200m
+            memory: 300Mi
+          limits:
+            memory: 400Mi

@@ -7,7 +7,6 @@ from unittest.mock import patch, MagicMock
 from src.data.data_loader import BikeDataLoader
 from src.utils.logger import get_logger
 
-
 class TestDataLoader(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)  # No need to pass self explicitly

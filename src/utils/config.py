@@ -34,6 +34,10 @@ class DevelopmentConfig(Config):
     # pre-trained sentence transformer model
     PRETRAINED_TRANSFORMER_MODEL = os.getenv('PRETRAINED_TRANSFORMER_MODEL')
 
+    PROJECT_NAME = os.getenv("PROJECT_NAME")
+    VERSION = os.getenv("VERSION")
+    DESCRIPTION = os.getenv("DESCRIPTION")
+
 
 class TestingConfig(Config):
     """Testing-specific configuration."""

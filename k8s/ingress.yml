@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: similarity-search-ingress
+spec:
+  rules:
+  - host: similarity-search.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix   # Exact
+        backend:
+          service:
+            name: similarity-search-ingress
+            port:
+              number: 80
