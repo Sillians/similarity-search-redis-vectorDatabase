@@ -1,5 +1,5 @@
 # Similarity Search Using Redis as the Vector Database. 
-(A Modular Vector Similarity Search with Redis as a Vector Database.)
+(A Modular Vector Similarity Search Approach with Redis as the Vector Database.)
 
 ### Overview of Vector Databases
 A vector database stores, manages and indexes high-dimensional vector data. 
@@ -33,8 +33,105 @@ This is where similarity search kicks in. The vector representation for images i
 vectors for similar images, where similar vectors are defined as those that are nearby in Euclidean space.
 
 
+## Overview of the Similarity Search using Redis as the Vector Database
+
+The core aim of this, is to demonstrate how to do semantic searched on unstructured data using vector similarity and Redis. Vector similarity
+search measures how different (or similar) two or more vectors are. It is a technique used to find similar content or data according to 
+their representations. Vectors are compared using a distance metric, such as Euclidean distance or cosine similarity. The closer two vectors are,
+the more similar they are. 
+
+Approach adopted:
+- Generating vector embeddings for text data using SentenceTransformers.
+- Storing JSON documents containing text and vector embeddings in Redis Database.
+- Creating a RediSearch index on the JSON data.
+- Performing semantic searches using vector similarity queries.
+- Query types demonstrated:
+  - KNN similarity search
+  - Hybrid search using filters
+  - Range queries
+
+### Dataset 
+A small synthetic JSON dataset of bicycle description. An example structure;
+```json
+{
+  "model": "Hillcraft",
+  "brand": "Bicyk",
+  "price": 550,
+  "type": "Kids Mountain bikes",
+  "specs": {
+    "material": "carbon",
+    "weight": "12"
+  },
+  "description": "Small and powerful, the Hillcraft is the best ride for the smallest of tikes! The Hillcraft will ship with a coaster brake. A freewheel kit is provided at no cost. ",
+}
+```
+
+### Code Structure
+```md
+similarity-search/
+│
+├── src/                     # Application source code
+│   ├── __init__.py
+│   ├── data/
+│   ├── models/ 
+│   ├── app/
+│   ├── pipelines/
+│   ├── utils/
+│   ├── tests/
+│   ├── README.md
+│   └── ...
+│
+│
+├── k8s/                     # Kubernetes configuration files
+│   ├── deployment.yml       # Kubernetes Deployment resource
+│   ├── service.yml          # Kubernetes Service resource
+│   ├── ingress.yml          # (Optional) Ingress configuration
+│   └── secrets.yml          # (Optional) Kubernetes Secrets
+│
+│
+├── .github/                 # CI/CD workflows (e.g., GitHub Actions)
+│   └── workflows/
+│       └── vss-pipeline.yml # CI/CD pipeline script for building and deploying
+│
+│
+├── .env                     # Environment variables file
+├── Dockerfile               # Dockerfile to build the app
+├── requirements.txt         # Python dependencies
+├── README.md                # Documentation
+└── LICENSE                  # License file
+```
 
 
+### Environment Setup
+Requires a few packages and intial setups for full implementation; 
+- Redis (redis-py)
+- Sentence Transformer model (sentence_transformers)
+- FastAPI
+- Kubernetes cluster (Minikube) -> (Optional[😉])
+- Setup and Access to a Running Redis Stack instance
+- Redis connection configuration credentials (secrets)
+- Alternatively run Redis Stack locally using Docker. 
+
+
+### What happens when code is executed;
+Upon code execution, 
+- The data is loaded and inspected as a Sample JSON data
+- Connection to the Redis Database Stack instance is established.
+- Generated vector embeddings for the text descriptions.
+- The JSON data is saved with embeddings into Redis.
+- Creation of a RediSearch index on the data
+- Execute vector similarity search queries
+
+
+## Key Concepts
+The core concepts covered include:
+
+- Using pre-trained NLP models like SentenceTransformers to generate semantic vector representations of text
+- Storing and indexing vectors along with structured data in Redis
+- Utilizing vector similarity KNN search and other query types in RediSearch
+- Ranking and retrieving results by semantic similarity
+
+The techniques presented allow for building powerful semantic search experiences over unstructured data with Redis.
 
 
 

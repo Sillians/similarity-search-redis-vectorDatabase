@@ -38,6 +38,11 @@ class DevelopmentConfig(Config):
     VERSION = os.getenv("VERSION")
     DESCRIPTION = os.getenv("DESCRIPTION")
 
+    FASTAPI_HOST = os.getenv("FASTAPI_HOST")
+    FASTAPI_PORT = int(os.getenv('FASTAPI_PORT', 8000))
+    FASTAPI_WORKERS = int(os.getenv('FASTAPI_WORKERS', 2))
+    FASTAPI_APP = os.getenv("FASTAPI_APP")
+
 
 class TestingConfig(Config):
     """Testing-specific configuration."""

@@ -3,8 +3,8 @@ from fastapi import APIRouter, HTTPException
 from src.pipelines.inference_pipeline import SemanticSearch
 from src.data.vector_store import RedisVectorOperations
 from src.pipelines.training_pipeline import RedisSearchIndex
-from pydantic import BaseModel
 from src.utils.logger import get_logger
+
 log = get_logger("Semantic Search on Bikes dataset...")
 
 router = APIRouter()
@@ -33,7 +33,7 @@ def search_bikes(query: str):
 def get_available_queries():
     """
     Get the list of predefined search queries
-    to helps users understand what kind of searches can be performed.
+    to help users understand what kind of searches can be performed.
     """
     queries = [
         'Bike for small kids',

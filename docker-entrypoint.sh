@@ -2,7 +2,7 @@
 set -e
 
 # Set the code directory path
-CODE_DIR="/app/src"
+CODE_DIR="/app/src/app"
 
 # file name to run
 MY_FILE=${1:-main.py}

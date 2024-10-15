@@ -48,7 +48,7 @@ ENV PYTHONPATH="${APP_WORKDIR}/"
 #ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Command to run FastAPI using Uvicorn
-CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+#CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 CMD ["python", "src/app/main.py"]
 
