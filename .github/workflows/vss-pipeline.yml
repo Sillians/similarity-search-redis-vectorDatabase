@@ -51,7 +51,7 @@ jobs:
       # Get the short commit SHA
       - name: Get short commit SHA
         id: git_info
-        run: echo "tag=${GITHUB_SHA}" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       # Log in to Docker Hub using the environment variables
       - name: Log in to Docker Hub
