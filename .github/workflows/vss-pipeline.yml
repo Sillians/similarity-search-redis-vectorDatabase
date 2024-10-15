@@ -35,71 +35,38 @@ jobs:
           pytest --cov=src src/tests/
 
 
-#  build_and_push:
-#    runs-on: ubuntu-latest
-#    needs: test  # Only runs after tests pass
-#
-#    env:
-#      DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-#      DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-#
-#    steps:
-#      # Checkout the repository
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      # Log in to Docker Hub using the environment variables
-#      - name: Log in to Docker Hub
-#        run: echo "${{ env.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
-#
-#      # Build Docker image
-#      - name: Build Docker image
-#        run: |
-#          docker build -t chukwuebukacihuoma/vector-similarity-search:0.1 .
-#
-#      # Push Docker image to Docker Hub
-#      - name: Push Docker image
-#        run: |
-#          docker push chukwuebukacihuoma/vector-similarity-search:0.1
-
-
   build_and_push:
-  runs-on: ubuntu-latest
-  needs: test  # Only runs after tests pass
+    runs-on: ubuntu-latest
+    needs: test  # Only runs after tests pass
 
-  env:
-    DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-    DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-  steps:
-    # Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v2
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # Get the short commit SHA
-    - name: Get short commit SHA
-      id: git_info
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      # Get the short commit SHA
+      - name: Get short commit SHA
+        id: git_info
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-    # Log in to Docker Hub using the environment variables
-    - name: Log in to Docker Hub
-      run: echo "${{ env.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
+      # Log in to Docker Hub using the environment variables
+      - name: Log in to Docker Hub
+        run: echo "${{ env.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
 
-    # Build Docker image with dynamic tag based on the Git commit SHA
-    - name: Build Docker image
-      run: |
-        docker build -t chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }} .
+      # Build Docker image with dynamic tag based on the Git commit SHA
+      - name: Build Docker image
+        run: |
+          docker build -t chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }} .
 
-#    # Push Docker image to Docker Hub
-#    - name: Push Docker image
-#      run: |
-#        docker push chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }}
-
-    # Push Docker image with "latest" tag
-    - name: Push Docker image with latest tag
-      run: |
-        docker tag chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }} chukwuebukacihuoma/vector-similarity-search:latest
-        docker push chukwuebukacihuoma/vector-similarity-search:latest
+      # Push Docker image with "latest" tag
+      - name: Push Docker image with latest tag
+        run: |
+          docker tag chukwuebukacihuoma/vector-similarity-search:${{ steps.git_info.outputs.sha_short }} chukwuebukacihuoma/vector-similarity-search:latest
+          docker push chukwuebukacihuoma/vector-similarity-search:latest
 
 
 
