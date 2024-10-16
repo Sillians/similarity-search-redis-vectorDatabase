@@ -1,4 +1,5 @@
-FROM python:3.12-slim
+# build dependencies
+FROM python:3.12-slim AS builder
 
 # Environment variables to prevent Python from buffering output and to set up the virtual environment
 ENV PYTHONUNBUFFERED=1 \
@@ -29,9 +30,12 @@ COPY requirements.txt .
 # Install code dependencies in virtual environment
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy and set the entrypoint
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# build runtime image
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY --from=builder /app /app
 
 # Copy rest of the code
 COPY . .
@@ -46,6 +50,22 @@ ENV APP_WORKDIR="/app"
 ENV PYTHONPATH="${APP_WORKDIR}/"
 
 # Command to run FastAPI using Uvicorn
-CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+#CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
+
+
+## First stage: build dependencies
+#FROM python:3.12-slim AS builder
+#WORKDIR /app
+#COPY requirements.txt .
+#RUN pip install --no-cache-dir -r requirements.txt
+#
+## Final stage: build runtime image
+#FROM python:3.12-slim
+#WORKDIR /app
+#COPY --from=builder /app /app
+#COPY . .
+#
+#CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 

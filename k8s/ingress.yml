@@ -1,7 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: similarity-search-ingress
+  name: vector-similarity-search-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: similarity-search.com
@@ -11,6 +13,6 @@ spec:
         pathType: Prefix   # Exact
         backend:
           service:
-            name: similarity-search-ingress
+            name: vector-similarity-search-app
             port:
               number: 80

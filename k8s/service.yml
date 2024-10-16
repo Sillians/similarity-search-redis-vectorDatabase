@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: similarity-search-service
+  name: vector-similarity-search-service
+  labels:
+    app: vector-similarity-search-app
 spec:
   selector:
-    app: similarity-search
-    app.kubernetes.io/name: similarity-search
+    app: vector-similarity-search-app
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 80           # port on which the service is exposed
+      targetPort: 8001   # port on the container
   type: NodePort  # Use NodePort for local, LoadBalancer for cloud environments
+

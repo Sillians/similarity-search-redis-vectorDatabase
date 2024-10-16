@@ -25,8 +25,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-#        with:
-#          python-version: '3.12'
 
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
@@ -42,7 +40,7 @@ jobs:
 
 
   build_and_push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: test
 
     env:
@@ -70,39 +68,18 @@ jobs:
           docker push chukwuebukacihuoma/vector-similarity-search:latest
 
 
-
-#
 #  deploy:
-#    runs-on: ubuntu-latest
+#    runs-on: ubuntu-24.04
 #    needs: build_and_push
 #
 #    steps:
 #      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Set up Kubernetes
-#        uses: azure/setup-kubectl@v1
-#        with:
-#          version: 'v1.21.0'
-#
-#      - name: Deploy to Kubernetes
-#        run: |
-#          kubectl apply -f k8s/deployment.yml
-#          kubectl rollout status deployment/your-app-deployment
-
-
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: build_and_push
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
+#        uses: actions/checkout@v4
 #
 #      - name: Set up kubectl
-#        uses: azure/setup-kubectl@v1
+#        uses: azure/setup-kubectl@v4
 #        with:
-#          version: 'v1.18.0'
+#          version: 'v1.31.0'
 #
 #      - name: Deploy to Kubernetes
 #        env:
@@ -110,4 +87,17 @@ jobs:
 #        run: |
 #          kubectl apply -f k8s/deployment.yml
 #          kubectl apply -f k8s/service.yml
-#          kubectl rollout status deployment/similarity-search-deployment
+##          kubectl apply -f k8s/ingress.yml
+#          kubectl rollout status deployment/vector-similarity-search
+#
+#
+#
+#
+#          kubectl get pods -w
+#          kubectl config get-contexts    # Get the current namespace I am using
+#          kubectl rollout restart deployment vector-similarity-search-deployment
+
+
+
+
+
