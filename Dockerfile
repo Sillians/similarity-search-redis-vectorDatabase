@@ -39,10 +39,12 @@ COPY --from=builder /opt/venv /opt/venv
 # Set the PATH to include the virtual environment binaries
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy the rest of the application code
+WORKDIR /app
+
+# Copy application code
 COPY . .
 
-WORKDIR /app
+ENV PYTHONPATH="/app"
 
 # Expose the application port
 EXPOSE 8001
@@ -51,12 +53,8 @@ EXPOSE 8001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8001/health || exit 1
 
-# Command to run FastAPI using Uvicorn
+# Run FastAPI using Uvicorn
 ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
-
-# Command to run FastAPI using Uvicorn
-#ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
-#CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
 
