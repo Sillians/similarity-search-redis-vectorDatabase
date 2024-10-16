@@ -1,4 +1,4 @@
-# build dependencies
+# Stage: build dependencies
 FROM python:3.12-slim AS builder
 
 # Environment variables to prevent Python from buffering output and to set up the virtual environment
@@ -30,7 +30,7 @@ COPY requirements.txt .
 # Install code dependencies in virtual environment
 RUN pip install --no-cache-dir -r requirements.txt
 
-# build runtime image
+# Stage: build runtime image
 FROM python:3.12-slim
 
 # Copy the virtual environment from the builder stage
@@ -59,19 +59,4 @@ ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"
 #ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 #CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
-
-
-## First stage: build dependencies
-#FROM python:3.12-slim AS builder
-#WORKDIR /app
-#COPY requirements.txt .
-#RUN pip install --no-cache-dir -r requirements.txt
-#
-## Final stage: build runtime image
-#FROM python:3.12-slim
-#WORKDIR /app
-#COPY --from=builder /app /app
-#COPY . .
-#
-#CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
