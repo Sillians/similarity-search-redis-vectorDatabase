@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [Ubuntu 24.04, macOS 14, Windows Server 2022]
+        os: [ ubuntu-24.04, macos-14, windows-2022 ]
         python-version: [ "3.10", "3.11", "3.12" ]
 
     steps:
