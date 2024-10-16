@@ -5,10 +5,8 @@ requests
 sentence-transformers
 python-dotenv
 tabulate
-ipython
 fastapi
 uvicorn
 pydantic
-gunicorn
 pytest
 pytest-cov
