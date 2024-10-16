@@ -33,24 +33,30 @@ RUN pip install --no-cache-dir -r requirements.txt
 # build runtime image
 FROM python:3.12-slim
 
-WORKDIR /app
+# Copy the virtual environment from the builder stage
+COPY --from=builder /opt/venv /opt/venv
 
-COPY --from=builder /app /app
+# Set the PATH to include the virtual environment binaries
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy rest of the code
+# Copy the rest of the application code
 COPY . .
 
-# Expose port and healthcheck
-EXPOSE 8001
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-CMD curl -f http://localhost:8001/health || exit 1
+WORKDIR /app
 
-# Set PYTHONPATH to point to the correct code directory
-ENV APP_WORKDIR="/app"
-ENV PYTHONPATH="${APP_WORKDIR}/"
+# Expose the application port
+EXPOSE 8001
+
+# Healthcheck to ensure the app is running
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8001/health || exit 1
 
 # Command to run FastAPI using Uvicorn
 ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+
+
+# Command to run FastAPI using Uvicorn
+#ENTRYPOINT ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 #CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
 

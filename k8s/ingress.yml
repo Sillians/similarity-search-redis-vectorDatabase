@@ -13,6 +13,6 @@ spec:
         pathType: Prefix   # Exact
         backend:
           service:
-            name: vector-similarity-search-app
+            name: vector-similarity-search
             port:
               number: 80

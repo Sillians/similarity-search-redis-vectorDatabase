@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: vector-similarity-search-service
   labels:
-    app: vector-similarity-search-app
+    app: vector-similarity-search
 spec:
   selector:
-    app: vector-similarity-search-app
+    app: vector-similarity-search
   ports:
     - protocol: TCP
       port: 80           # port on which the service is exposed

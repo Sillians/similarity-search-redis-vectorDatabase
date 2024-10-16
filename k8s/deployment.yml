@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: vector-similarity-search-deployment
   labels:
-    app: vector-similarity-search-app
+    app: vector-similarity-search
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: vector-similarity-search-app
+      app: vector-similarity-search
   template:
     metadata:
       labels:
-        app: vector-similarity-search-app
+        app: vector-similarity-search
     spec:
       containers:
-      - name: vector-similarity-search-app
+      - name: vector-similarity-search
         image: chukwuebukacihuoma/vector-similarity-search:latest
         ports:
         - containerPort: 8001   # Port the app is running on
