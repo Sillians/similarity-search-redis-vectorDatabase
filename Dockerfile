@@ -1,4 +1,4 @@
-# Stage: build dependencies
+# Stage 1: build dependencies
 FROM python:3.12-slim AS builder
 
 # Environment variables to prevent Python from buffering output and to set up the virtual environment
@@ -30,7 +30,7 @@ COPY requirements.txt .
 # Install code dependencies in virtual environment
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Stage: build runtime image
+# Stage 2: build runtime image
 FROM python:3.12-slim
 
 # Copy the virtual environment from the builder stage

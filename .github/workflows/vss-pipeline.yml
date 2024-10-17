@@ -68,27 +68,27 @@ jobs:
           docker push chukwuebukacihuoma/vector-similarity-search:latest
 
 
-  deploy:
-    runs-on: ubuntu-24.04
-    needs: build_and_push
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: 'v1.31.0'
-
-      - name: Deploy to Kubernetes
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # store Kubeconfig in GitHub secrets
-        run: |
-          kubectl apply -f k8s/deployment.yml
-          kubectl apply -f k8s/service.yml
-          # kubectl apply -f k8s/ingress.yml
-          kubectl rollout status deployment/vector-similarity-search
+#  deploy:
+#    runs-on: ubuntu-24.04
+#    needs: build_and_push
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up kubectl
+#        uses: azure/setup-kubectl@v4
+#        with:
+#          version: 'v1.31.0'
+#
+#      - name: Deploy to Kubernetes
+#        env:
+#          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # store Kubeconfig in GitHub secrets
+#        run: |
+#          kubectl apply -f k8s/deployment.yml
+#          kubectl apply -f k8s/service.yml
+#          # kubectl apply -f k8s/ingress.yml
+#          kubectl rollout status deployment/vector-similarity-search
 
 
 

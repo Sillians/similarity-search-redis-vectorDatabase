@@ -1,7 +1,6 @@
 # If needed, for training new embeddings
 from redis.commands.search.field import TagField, TextField, NumericField, VectorField
 from redis.commands.search.indexDefinition import IndexDefinition, IndexType
-from redis.commands.search.query import Query
 from src.utils.config import get_config
 from src.utils.logger import get_logger
 from src.utils.redis_client import RedisClient
@@ -56,7 +55,7 @@ class RedisSearchIndex:
         total_indexing_time = info['total_indexing_time']
         percent_indexed = int(info['percent_indexed']) * 100
 
-        return (f"{num_docs} documents ({percent_indexed} percent) indexed with {indexing_failures} failures in {float(total_indexing_time):.2f} milliseconds")
+        return f"{num_docs} documents ({percent_indexed} percent) indexed with {indexing_failures} failures in {float(total_indexing_time):.2f} milliseconds"
 
 
 
