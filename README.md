@@ -1,4 +1,4 @@
-# Similarity Search Using Redis as the Vector Database. 
+# Similarity Search Using SentenceTransformer, and Redis as the Vector Database. 
 (A Modular Vector Similarity Search Approach with Redis as the Vector Database.)
 
 ### Overview of Vector Databases
@@ -33,7 +33,7 @@ This is where similarity search kicks in. The vector representation for images i
 vectors for similar images, where similar vectors are defined as those that are nearby in Euclidean space.
 
 
-## Overview of the Similarity Search using Redis as the Vector Database
+## Overview of the Similarity Search using SentenceTransformer, and Redis as the Vector Database
 
 The core aim of this, is to demonstrate how to do semantic searched on unstructured data using vector similarity and Redis. Vector similarity
 search measures how different (or similar) two or more vectors are. It is a technique used to find similar content or data according to 
@@ -51,7 +51,9 @@ Approach adopted:
   - Range queries
 
 ### Dataset 
-A small synthetic JSON dataset of bicycle description. An example structure;
+To implement the Vector Similarity Search, we'll use a subset of the Bikes dataset, a relatively simple synthetic dataset.
+The dataset has `11` bicycle records in JSON format, and includes the fields below;
+
 ```json
 {
   "model": "Hillcraft",
@@ -65,6 +67,48 @@ A small synthetic JSON dataset of bicycle description. An example structure;
   "description": "Small and powerful, the Hillcraft is the best ride for the smallest of tikes! The Hillcraft will ship with a coaster brake. A freewheel kit is provided at no cost. ",
 }
 ```
+The description field is particularly interesting for our purposes since it consists of a free-form textual description of a bicycle.
+
+### Text Embeddings using SentenceTransformers
+We will use the [SentenceTransformers](https://www.sbert.net/) framework to generate embeddings for the bikes descriptions. 
+Sentence-BERT `(SBERT)` is a BERT model modification that produces consistent and contextually rich sentence embeddings. 
+`SBERT` improves tasks like semantic search and text grouping by allowing for efficient and meaningful comparison of sentence-level semantic similarity.
+
+
+#### Selecting a suitable pre-trained Model
+Our objective is to query for bicycles using short sentences against the longer bicycle descriptions. This is referred to as `"Asymmetric Semantic Search,"` often
+employed in cases where the search query and the documents being searched are different nature or structure.
+
+To pick a suitable model based on the task when generating embeddings, suitable models for asymmetric semantic search include pre-trained [MS MARCO Models](https://microsoft.github.io/msmarco/).
+MS MARCO models are trained on the MicroSoft MAchine Reading COmprehension dataset, and are optimized for understanding real-world queries and retrieving
+relevant responses. They are widely used in search engines, chatbots, and other AI applications. For this project, we'll be using the `msmarco-distilbert-base-v4` model
+tuned for `cosine-similarity` available from SentenceTranformers.
+
+
+### Making the bikes collection searchable
+Redis Stack provides a powerful search engine [Redis Search](https://redis.io/docs/stack/search/) that introduces [commands](https://redis.io/docs/stack/search/commands/)
+to create and maintain search indices for both collections of HASHES and [JSON](https://redis.io/docs/stack/search/indexing_json/) documents.
+
+To create a search index for the bikes collection, we'll use the `FT.CREATE` command:
+```
+1️⃣ FT.CREATE idx:bikes_vss ON JSON 
+2️⃣  PREFIX 1 bikes: SCORE 1.0 
+3️⃣  SCHEMA 
+4️⃣    $.model TEXT WEIGHT 1.0 NOSTEM 
+5️⃣    $.brand TEXT WEIGHT 1.0 NOSTEM 
+6️⃣    $.price NUMERIC 
+7️⃣    $.type TAG SEPARATOR "," 
+8️⃣    $.description AS description TEXT WEIGHT 1.0 
+9️⃣    $.description_embeddings AS vector VECTOR FLAT 6 TYPE FLOAT32 DIM 768 DISTANCE_METRIC COSINE
+```
+
+There is a lot to unpack here; let's take it from the top:
+
+
+
+
+
+
 
 ### Code Structure
 ```md
@@ -122,6 +166,9 @@ Upon code execution,
 - Creation of a RediSearch index on the data
 - Execute vector similarity search queries
 
+
+### FastAPI
+After following these steps, you should be able to access the Swagger UI by navigating to http://localhost:8001/docs in your browser.
 
 ## Key Concepts
 The core concepts covered include:
