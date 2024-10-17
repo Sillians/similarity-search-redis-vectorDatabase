@@ -40,7 +40,10 @@ jobs:
 
 
   build_and_push:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04, macos-14, windows-2022 ]
     needs: test
 
     env:
@@ -69,7 +72,10 @@ jobs:
 
 
 #  deploy:
-#    runs-on: ubuntu-24.04
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-22.04, macos-14, windows-2022 ]
 #    needs: build_and_push
 #
 #    steps:
