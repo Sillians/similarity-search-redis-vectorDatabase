@@ -1,12 +1,4 @@
-# Unit tests for embedding generation
-
-
-
-
-
-
-
-
+# TODO: Unit tests for embedding generation
 
 #
 # # 1. Load a pretrained Sentence Transformer model
@@ -30,8 +22,6 @@
 # # tensor([[1.0000, 0.6660, 0.1046],
 # #         [0.6660, 1.0000, 0.1411],
 # #         [0.1046, 0.1411, 1.0000]])
-
-
 
 
 
