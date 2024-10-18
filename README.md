@@ -1,7 +1,21 @@
 # Similarity Search Using SentenceTransformer, and Redis as the Vector Database. 
-(A Modular Vector Similarity Search Approach with Redis as the Vector Database.)
+(A Modular Asymmetric Vector Similarity Search Approach with Redis as the Vector Database.)
 
-### Overview of Vector Databases
+## Overview of Semantic Search
+Semantic search seeks to improve search accuracy by understanding the semantic meaning of the search query and the corpus to search over. 
+Semantic search can also perform well given synonyms, abbreviations, and misspellings, unlike keyword search engines that can only find documents based on lexical matches.
+
+The idea behind semantic search is to embed all entries in your corpus, whether they be sentences, paragraphs, or documents, into a vector space. 
+At search time, the query is embedded into the same vector space and the closest embeddings from your corpus are found. 
+These entries should have a high semantic similarity with the query.
+
+### Symmetric vs. Asymmetric Semantic Search
+
+- For symmetric semantic search your query and the entries in your corpus are of about the same length and have the same amount of content.
+- For asymmetric semantic search, you usually have a short query (like a question or some keywords) and you want to find a longer paragraph answering the query. 
+
+
+## Overview of Vector Databases
 A vector database stores, manages and indexes high-dimensional vector data. 
 Data points are stored as arrays of numbers called “vectors,” which are clustered based on similarity. 
 This design enables low-latency queries, making it ideal for AI applications.
@@ -91,7 +105,7 @@ Upon code execution;
 - Creation of a RediSearch index on the data
 - Execute vector similarity search queries
 
-### A simple implementation using Cosine Similarity as the Distance Metric (For more details, refer to: [Distance Metrics in Vector Similarity Search](/Users/user/Projects/similarity-search-redis-vectorDatabase/VECTOR-SIMILARITY-SEARCH.md))
+#### A simple implementation of Cosine Similarity., used as the Distance Metric (For more details, refer to: [Distance Metrics in Vector Similarity Search](/Users/user/Projects/similarity-search-redis-vectorDatabase/VECTOR-SIMILARITY-SEARCH.md))
 ```python
 pip3 install sentence_transformers --quiet
 ```
@@ -122,7 +136,8 @@ query_embedding = model.encode("Someone in a gorilla costume is playing a set of
 
 # Define the distance metric (Cosine similarity)
 def cosine_similarity(A, B):
-    return np.dot(A, B)/(norm(A)*norm(B))
+    score = np.dot(A, B)/(norm(A)*norm(B))
+    return f"{score:.4f}"
 
 # Run semantic similarity search
 print("Query: Someone in a gorilla costume is playing a set of drums.")
@@ -134,13 +149,15 @@ for e, s in zip(embeddings, sentences):
 - Code Output: (Semantic similarity score of each data to the provided query)
 ```md
 Query: Someone in a gorilla costume is playing a set of drums.
-A monkey is playing drums.  -> similarity score =  0.6432533
-A cheetah is running behind its prey.  -> similarity score =  0.107986785
-A man is riding a white horse on an enclosed ground.  -> similarity score =  0.11909153
-A man is eating a piece of bread.  -> similarity score =  0.021566957
-A man is riding a horse.  -> similarity score =  0.13887261
-A woman is playing violin.  -> similarity score =  0.25641555
+A monkey is playing drums.  -> similarity score =  0.6433
+A cheetah is running behind its prey.  -> similarity score =  0.1080
+A man is riding a white horse on an enclosed ground.  -> similarity score =  0.1191
+A man is eating a piece of bread.  -> similarity score =  0.0216
+A man is riding a horse.  -> similarity score =  0.1389
+A woman is playing violin.  -> similarity score =  0.2564
 ```
+
+![Alt text](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/SemanticSearch.png "Semantic Search")
 
 
 ## Key Concepts
