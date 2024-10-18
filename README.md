@@ -91,7 +91,7 @@ Upon code execution;
 - Creation of a RediSearch index on the data
 - Execute vector similarity search queries
 
-### A simple implementation using Cosine Similarity as the Distance Metric (For more details and other distance metric, refer to: [Distance Metrics in Vector Similarity Search](/Users/user/Projects/similarity-search-redis-vectorDatabase/VECTOR-SIMILARITY-SEARCH.md))
+### A simple implementation using Cosine Similarity as the Distance Metric (For more details, refer to: [Distance Metrics in Vector Similarity Search](/Users/user/Projects/similarity-search-redis-vectorDatabase/VECTOR-SIMILARITY-SEARCH.md))
 ```python
 pip3 install sentence_transformers --quiet
 ```
