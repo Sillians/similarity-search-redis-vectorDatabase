@@ -22,6 +22,8 @@ A latent feature is an underlying characteristic or attribute that is not direct
 
 Latent features capture the hidden patterns and relationships in the data, enabling more meaningful and accurate representations of items as vectors in a high-dimensional space.
 
+#### Data represented as vectors in a high-dimensional space (Vector embeddings)
+![Alt text](https://lh3.googleusercontent.com/F3cl6UTiYaeyOOx4R4s0ebI3OQCZ9-0uKCcG8VgJ2eLfudEhvrr2tuOynixfiy1GReyxfdAoW0GUvJiO0psv42AwRWkSO5EU5j6NrbgM7uRXQVRBACsL-gI6EkmDPfr-vFzFWRiOAIoR4PTndXNYmpQ "Vector Embeddings")
 
 ### How can a vector representation be used?
 
@@ -72,7 +74,7 @@ similarity-search/
 ### Environment Setup
 Requires a few packages and intial setups for full implementation; 
 - Redis (redis-py)
-- Sentence Transformer model (sentence_transformers)
+- Sentence Transformer model (sentence_transformers from HuggingFace, easy to use models for tasks like semantic similarity search, visual search, and many others.)
 - FastAPI (Search Query in Swagger UI)
 - Kubernetes cluster (Minikube) -> (Optional[😉])
 - Setup and Access to a Running Redis Stack instance
@@ -88,6 +90,57 @@ Upon code execution;
 - The JSON data is saved with embeddings into Redis.
 - Creation of a RediSearch index on the data
 - Execute vector similarity search queries
+
+### A simple implementation using Cosine Similarity as the Distance Metric (For more details and other distance metric, refer to: [Distance Metrics in Vector Similarity Search](/Users/user/Projects/similarity-search-redis-vectorDatabase/VECTOR-SIMILARITY-SEARCH.md))
+```python
+pip3 install sentence_transformers --quiet
+```
+
+```python
+import numpy as np
+from numpy.linalg import norm
+from sentence_transformers import SentenceTransformer
+
+# Define the model
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+# sample data
+sentences = [
+    "A monkey is playing drums.",
+    "A cheetah is running behind its prey.",
+    "A man is riding a white horse on an enclosed ground.",
+    "A man is eating a piece of bread.",
+    "A man is riding a horse.",
+    "A woman is playing violin."
+]
+
+# vector embeddings created from dataset
+embeddings = model.encode(sentences)
+
+# encode the query vector embedding
+query_embedding = model.encode("Someone in a gorilla costume is playing a set of drums.")
+
+# Define the distance metric (Cosine similarity)
+def cosine_similarity(A, B):
+    return np.dot(A, B)/(norm(A)*norm(B))
+
+# Run semantic similarity search
+print("Query: Someone in a gorilla costume is playing a set of drums.")
+for e, s in zip(embeddings, sentences):
+    print(s, " -> similarity score = ",
+          cosine_similarity(e, query_embedding))
+```
+
+- Code Output: (Semantic similarity score of each data to the provided query)
+```md
+Query: Someone in a gorilla costume is playing a set of drums.
+A monkey is playing drums.  -> similarity score =  0.6432533
+A cheetah is running behind its prey.  -> similarity score =  0.107986785
+A man is riding a white horse on an enclosed ground.  -> similarity score =  0.11909153
+A man is eating a piece of bread.  -> similarity score =  0.021566957
+A man is riding a horse.  -> similarity score =  0.13887261
+A woman is playing violin.  -> similarity score =  0.25641555
+```
 
 
 ## Key Concepts
